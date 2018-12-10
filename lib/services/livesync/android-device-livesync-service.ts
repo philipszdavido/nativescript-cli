@@ -1,4 +1,5 @@
 import { AndroidDeviceLiveSyncServiceBase } from "./android-device-livesync-service-base";
+import { performanceLog } from "../../common/decorators";
 import * as helpers from "../../common/helpers";
 import { LiveSyncPaths } from "../../common/constants";
 import * as path from "path";
@@ -71,6 +72,7 @@ export class AndroidDeviceLiveSyncService extends AndroidDeviceLiveSyncServiceBa
 		await this.device.applicationManager.restartApplication({ appId: deviceAppData.appIdentifier, projectName });
 	}
 
+	@performanceLog()
 	public async beforeLiveSyncAction(deviceAppData: Mobile.IDeviceAppData): Promise<void> {
 		const deviceRootPath = await this.$devicePathProvider.getDeviceProjectRootPath(deviceAppData.device, {
 			appIdentifier: deviceAppData.appIdentifier,
@@ -107,6 +109,7 @@ export class AndroidDeviceLiveSyncService extends AndroidDeviceLiveSyncServiceBa
 		return true;
 	}
 
+	@performanceLog()
 	public async removeFiles(deviceAppData: Mobile.IDeviceAppData, localToDevicePaths: Mobile.ILocalToDevicePathData[]): Promise<void> {
 		const deviceRootPath = await this.$devicePathProvider.getDeviceProjectRootPath(deviceAppData.device, {
 			appIdentifier: deviceAppData.appIdentifier,
