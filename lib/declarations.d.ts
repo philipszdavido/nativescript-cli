@@ -326,6 +326,11 @@ interface IDependencyData {
 	name: string;
 
 	/**
+	 * Version of the dependency.
+	 */
+	version: string;
+
+	/**
 	 * The full path where the package is installed.
 	 */
 	directory: string;
