@@ -351,6 +351,11 @@ interface IDependencyData {
 	 * Dependencies of the current module.
 	 */
 	dependencies?: string[];
+
+	/**
+	 * Shows if package is deduped, so it should not be included when copying files to platforms dir.
+	 */
+	deduped?: boolean;
 }
 
 interface INpmsResult {

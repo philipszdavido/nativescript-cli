@@ -63,6 +63,8 @@ export class NodeModulesDependenciesBuilder implements INodeModulesDependenciesB
 						if (alreadyAddedDependency.version === resolvedDependency.version) {
 							console.log(`Will not add ${resolvedDependency.name} from location ${resolvedDependency.directory} as it has already been added from ${resolvedDependency.directory}.
 It is not expected to have the same version of a dependency in different locations. Consider removing node_modules and package-lock.json (npm-shrinkwrap.json) and installing dependencies again.`);
+							resolvedDependency.deduped = true;
+							resolvedDependencies.push(resolvedDependency);
 						} else {
 							throw new Error(`Unable to add dependency ${resolvedDependency.directory} as different version of the same dependency has been added from ${alreadyAddedDependency.directory}`);
 						}
@@ -77,6 +79,9 @@ It is not expected to have the same version of a dependency in different locatio
 			}
 		}
 
+		console.log("-----");
+		console.log(JSON.stringify(resolvedDependencies, null, 2));
+		console.log("-----");
 		return resolvedDependencies;
 	}
 
