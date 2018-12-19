@@ -1,6 +1,7 @@
 import { sleep } from "../common/helpers";
 import { DebugServiceBase } from "./debug-service-base";
 import { LiveSyncPaths } from "../common/constants";
+import { performanceLog } from "../common/decorators";
 
 export class AndroidDeviceDebugService extends DebugServiceBase implements IDeviceDebugService {
 	private _packageName: string;
@@ -24,6 +25,7 @@ export class AndroidDeviceDebugService extends DebugServiceBase implements IDevi
 		this.deviceIdentifier = device.deviceInfo.identifier;
 	}
 
+	@performanceLog()
 	public async debug(debugData: IDebugData, debugOptions: IDebugOptions): Promise<string> {
 		this._packageName = debugData.applicationIdentifier;
 		const result = this.device.isEmulator
@@ -97,6 +99,7 @@ export class AndroidDeviceDebugService extends DebugServiceBase implements IDevi
 		return this.device.adb.executeCommand(["forward", `tcp:${local}`, `localabstract:${remote}`]);
 	}
 
+	@performanceLog()
 	private async debugOnDevice(debugData: IDebugData, debugOptions: IDebugOptions): Promise<string> {
 		let packageFile = "";
 
@@ -119,6 +122,7 @@ export class AndroidDeviceDebugService extends DebugServiceBase implements IDevi
 		return deviceActionResult[0].result;
 	}
 
+	@performanceLog()
 	private async debugCore(device: Mobile.IAndroidDevice, packageFile: string, appData: Mobile.IApplicationData, debugOptions: IDebugOptions): Promise<string> {
 		if (debugOptions.stop) {
 			await this.removePortForwarding();

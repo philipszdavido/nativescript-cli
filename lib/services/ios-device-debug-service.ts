@@ -8,6 +8,7 @@ import { getPidFromiOSSimulatorLogs } from "../common/helpers";
 const inspectorAppName = "NativeScript Inspector.app";
 const inspectorNpmPackageName = "tns-ios-inspector";
 const inspectorUiDir = "WebInspectorUI/";
+import { performanceLog } from "../common/decorators";
 
 export class IOSDeviceDebugService extends DebugServiceBase implements IDeviceDebugService {
 	private _lldbProcess: ChildProcess;
@@ -38,6 +39,7 @@ export class IOSDeviceDebugService extends DebugServiceBase implements IDeviceDe
 		return "ios";
 	}
 
+	@performanceLog()
 	public async debug(debugData: IDebugData, debugOptions: IDebugOptions): Promise<string> {
 		this.validateOptions(debugOptions);
 
@@ -75,6 +77,7 @@ export class IOSDeviceDebugService extends DebugServiceBase implements IDeviceDe
 		}
 	}
 
+	@performanceLog()
 	private async startDeviceLogProcess(debugData: IDebugData, debugOptions: IDebugOptions): Promise<void> {
 		if (debugOptions.justlaunch) {
 			// No logs should be printed on console when `--justlaunch` option is passed.
@@ -95,6 +98,7 @@ export class IOSDeviceDebugService extends DebugServiceBase implements IDeviceDe
 		await this.device.openDeviceLogStream({ predicate: IOS_LOG_PREDICATE });
 	}
 
+	@performanceLog()
 	private async startAppOnSimulator(debugData: IDebugData, debugOptions: IDebugOptions): Promise<void> {
 		const args = debugOptions.debugBrk ? "--nativescript-debug-brk" : "--nativescript-debug-start";
 		const launchResult = await this.$iOSEmulatorServices.runApplicationOnEmulator(debugData.pathToAppPackage, {
@@ -112,6 +116,7 @@ export class IOSDeviceDebugService extends DebugServiceBase implements IDeviceDe
 		this.startAppDebuggerOnSimulator(pid);
 	}
 
+	@performanceLog()
 	private async startAppOnDevice(debugData: IDebugData, debugOptions: IDebugOptions): Promise<void> {
 		const runOptions: IRunPlatformOptions = {
 			device: this.deviceIdentifier,
@@ -148,6 +153,7 @@ export class IOSDeviceDebugService extends DebugServiceBase implements IDeviceDe
 		}
 	}
 
+	@performanceLog()
 	private async wireDebuggerClient(debugData: IDebugData, debugOptions: IDebugOptions): Promise<string> {
 		if ((debugOptions.inspector || !debugOptions.client) && this.$hostInfo.isDarwin) {
 			return await this.setupTcpAppDebugProxy(debugData, debugOptions);
@@ -181,6 +187,7 @@ export class IOSDeviceDebugService extends DebugServiceBase implements IDeviceDe
 		return null;
 	}
 
+	@performanceLog()
 	private async openAppInspector(fileDescriptor: string, debugData: IDebugData, debugOptions: IDebugOptions): Promise<ChildProcess> {
 		if (debugOptions.client) {
 			const inspectorPath = await this.$packageInstallationManager.getInspectorFromCache(inspectorNpmPackageName, debugData.projectDir);
